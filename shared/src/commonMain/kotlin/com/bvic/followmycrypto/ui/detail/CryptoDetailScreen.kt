@@ -2,6 +2,7 @@ package com.bvic.followmycrypto.ui.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -105,7 +106,36 @@ fun CryptoDetail(crypto: Crypto, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleMedium,
             color = if (crypto.changePercent >= 0) PriceUp else PriceDown,
         )
+
+        Row() {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "Plus haut sur 24h",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = formatPrice(crypto.highPrice),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Row() {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "Plus bas sur 24h",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = formatPrice(crypto.lowPrice),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+        }
     }
+
+
 }
 
 @Preview(showBackground = true)
@@ -115,7 +145,7 @@ fun CryptoDetailContentPreview() {
         CryptoDetailContent(
             symbol = "BTC",
             uiState = CryptoDetailUiState.Success(
-                Crypto(symbol = "BTC", name = "Bitcoin", price = 85613.50, changePercent = 0.88),
+                Crypto(symbol = "BTC", name = "Bitcoin", price = 85613.50, changePercent = 0.88, highPrice = 8545.0),
             ),
             onBack = {},
             onRetry = {},
