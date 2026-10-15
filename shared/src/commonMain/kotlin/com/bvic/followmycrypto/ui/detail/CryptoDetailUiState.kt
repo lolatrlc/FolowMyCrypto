@@ -6,8 +6,5 @@ import com.bvic.followmycrypto.model.Crypto
 sealed interface CryptoDetailUiState {
     data object Loading : CryptoDetailUiState
     data class Error(val message: String) : CryptoDetailUiState
-    data class Success(
-        val crypto: Crypto,
-        val estFavori: Boolean = false,
-    ) : CryptoDetailUiState
+    data class Success(val crypto: Crypto) : CryptoDetailUiState
 }
