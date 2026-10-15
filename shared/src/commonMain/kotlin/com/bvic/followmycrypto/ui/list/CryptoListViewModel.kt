@@ -3,6 +3,7 @@ package com.bvic.followmycrypto.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bvic.followmycrypto.data.CryptoRepository
+import com.bvic.followmycrypto.model.Currency
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,8 @@ class CryptoListViewModel(
 
     // Version en lecture seule, exposée à l'interface
     val uiState: StateFlow<CryptoListUiState> = _uiState.asStateFlow()
+    var currency = Currency.DOLLAR
+        private set //pour que seul le ViewModel puisse changer état
 
     init {
         load()
@@ -28,10 +31,15 @@ class CryptoListViewModel(
         _uiState.value = CryptoListUiState.Loading
         viewModelScope.launch {
             try {
-                _uiState.value = CryptoListUiState.Success(repository.getCryptos())
+                _uiState.value = CryptoListUiState.Success(repository.getCryptos(currency), currency)
             } catch (e: Exception) {
                 _uiState.value = CryptoListUiState.Error("Impossible de charger les cours.")
             }
         }
+    }
+
+    fun changeCurrency(newCurrency: Currency){
+        currency = newCurrency
+        load()
     }
 }
