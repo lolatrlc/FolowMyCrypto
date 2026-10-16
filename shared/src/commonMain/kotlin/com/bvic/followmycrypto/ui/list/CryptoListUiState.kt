@@ -9,7 +9,7 @@ sealed interface CryptoListUiState {
     data class Error(val message: String) : CryptoListUiState
     data class Success(
         val cryptos: List<Crypto>,
-        val currency: Currency),
+        val currency: Currency,
         val favoris: Set<String> = emptySet(),
         val filtreActif: Boolean = false,
     ) : CryptoListUiState

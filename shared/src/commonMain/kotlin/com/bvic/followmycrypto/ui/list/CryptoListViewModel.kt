@@ -22,7 +22,6 @@ class CryptoListViewModel(
     private val _loadState = MutableStateFlow<CryptoListUiState>(CryptoListUiState.Loading)
 
     // Version en lecture seule, exposée à l'interface
-    val uiState: StateFlow<CryptoListUiState> = _uiState.asStateFlow()
     var currency = Currency.DOLLAR
         private set //pour que seul le ViewModel puisse changer état
     val uiState: StateFlow<CryptoListUiState> = combine(
@@ -65,5 +64,4 @@ class CryptoListViewModel(
         currency = newCurrency
         load()
     }
-}
 }
