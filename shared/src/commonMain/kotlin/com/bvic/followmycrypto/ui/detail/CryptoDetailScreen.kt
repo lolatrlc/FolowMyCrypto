@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,7 +49,6 @@ fun CryptoDetailScreen(
         uiState = uiState,
         onBack = onBack,
         onRetry = viewModel::retry,
-        toggleFavori = viewModel::toggleFavori,
         modifier = modifier,
     )
 }
@@ -63,11 +59,8 @@ fun CryptoDetailContent(
     uiState: CryptoDetailUiState,
     onBack: () -> Unit,
     onRetry: () -> Unit,
-    toggleFavori: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val estFavori = (uiState as? CryptoDetailUiState.Success)?.estFavori == true
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -78,20 +71,8 @@ fun CryptoDetailContent(
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour")
                     }
                 },
-                actions = {
-                    if (uiState is CryptoDetailUiState.Success) {
-                        IconButton(onClick = toggleFavori) {
-                            Icon(
-                                imageVector = if (estFavori) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                                contentDescription = if (estFavori) "Retirer des favoris" else "Ajouter aux favoris",
-                                tint = Color.Red,
-                            )
-                        }
-                    }
-                }
             )
         },
-
     ) { innerPadding ->
         val contentModifier = Modifier.padding(innerPadding).fillMaxSize()
         when (uiState) {
@@ -171,7 +152,6 @@ fun CryptoDetailContentPreview() {
             ),
             onBack = {},
             onRetry = {},
-            toggleFavori = {},
         )
     }
 }

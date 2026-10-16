@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,9 +45,7 @@ import com.bvic.followmycrypto.ui.format.formatPrice
 fun CryptoListScreen(
     onCryptoClick: (String, Currency) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CryptoListViewModel = viewModel {
-        CryptoListViewModel(AppContainer.cryptoRepository, AppContainer.favoriRepository)
-    },
+    viewModel: CryptoListViewModel = viewModel { CryptoListViewModel(AppContainer.cryptoRepository) },
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -78,20 +73,12 @@ fun CryptoListContent(
     toggleFiltre: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val filtreActif = (uiState as? CryptoListUiState.Success)?.filtreActif == true
-
     Scaffold(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("FollowMyCrypto", fontWeight = FontWeight.Bold) },
                 actions = {
-                    IconButton(onClick = toggleFiltre) {
-                        Icon(
-                            imageVector = if (filtreActif) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                            contentDescription = if (filtreActif) "Afficher toutes les cryptos" else "Afficher les favoris",
-                        )
-                    }
                     IconButton(onClick = onRefresh) {
                         Icon(Icons.Filled.Refresh, contentDescription = "Rafraîchir")
                     }
