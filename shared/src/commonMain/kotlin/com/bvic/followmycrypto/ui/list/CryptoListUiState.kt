@@ -7,5 +7,10 @@ import com.bvic.followmycrypto.model.Currency
 sealed interface CryptoListUiState {
     data object Loading : CryptoListUiState
     data class Error(val message: String) : CryptoListUiState
-    data class Success(val cryptos: List<Crypto>, val currency: Currency) : CryptoListUiState
+    data class Success(
+        val cryptos: List<Crypto>,
+        val currency: Currency),
+        val favoris: Set<String> = emptySet(),
+        val filtreActif: Boolean = false,
+    ) : CryptoListUiState
 }
