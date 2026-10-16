@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.bvic.followmycrypto.model.Currency
 import com.bvic.followmycrypto.theme.FollowMyCryptoTheme
 import com.bvic.followmycrypto.ui.detail.CryptoDetailScreen
 import com.bvic.followmycrypto.ui.list.CryptoListScreen
@@ -13,9 +14,8 @@ import kotlinx.serialization.Serializable
 // Chaque écran a une « route » : un objet qui l'identifie et porte ses arguments
 @Serializable
 object ListRoute
-
 @Serializable
-data class DetailRoute(val symbol: String)
+data class DetailRoute(val symbol: String, val currency: String)
 
 @Composable
 fun App() {
@@ -24,12 +24,12 @@ fun App() {
         NavHost(navController = navController, startDestination = ListRoute) {
             composable<ListRoute> {
                 CryptoListScreen(
-                    onCryptoClick = { symbol -> navController.navigate(DetailRoute(symbol)) },
+                    onCryptoClick = { symbol, currency -> navController.navigate(DetailRoute(symbol, currency.name)) },
                 )
             }
             composable<DetailRoute> { backStackEntry ->
                 val route = backStackEntry.toRoute<DetailRoute>()
-                CryptoDetailScreen(symbol = route.symbol, onBack = { navController.popBackStack() })
+                CryptoDetailScreen(symbol = route.symbol, currency = Currency.valueOf(route.currency), onBack = { navController.popBackStack() })
             }
         }
     }

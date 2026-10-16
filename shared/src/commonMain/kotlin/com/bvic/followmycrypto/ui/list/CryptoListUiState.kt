@@ -1,6 +1,7 @@
 package com.bvic.followmycrypto.ui.list
 
 import com.bvic.followmycrypto.model.Crypto
+import com.bvic.followmycrypto.model.Currency
 
 // Tout ce que l'écran peut afficher, et rien d'autre
 sealed interface CryptoListUiState {
@@ -8,6 +9,7 @@ sealed interface CryptoListUiState {
     data class Error(val message: String) : CryptoListUiState
     data class Success(
         val cryptos: List<Crypto>,
+        val currency: Currency),
         val favoris: Set<String> = emptySet(),
         val filtreActif: Boolean = false,
     ) : CryptoListUiState

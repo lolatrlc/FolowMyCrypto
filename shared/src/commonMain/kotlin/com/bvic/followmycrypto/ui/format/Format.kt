@@ -17,13 +17,13 @@ fun formatNumber(value: Double, decimals: Int, grouping: Boolean = true): String
     return "$sign$integerPart,$decimalPart"
 }
 
-fun formatPrice(value: Double): String {
+fun formatPrice(value: Double, symbol: String): String {
     val decimals = when {
         value >= 1.0 -> 2
         value >= 0.01 -> 4
         else -> 8
     }
-    return "${formatNumber(value, decimals)} $"
+    return "${formatNumber(value, decimals)} $symbol"
 }
 
 fun formatPercent(value: Double): String {
