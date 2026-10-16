@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bvic.followmycrypto.data.AppContainer
 import com.bvic.followmycrypto.model.Crypto
+import com.bvic.followmycrypto.model.Currency
 import com.bvic.followmycrypto.theme.FollowMyCryptoTheme
 import com.bvic.followmycrypto.theme.PriceDown
 import com.bvic.followmycrypto.theme.PriceUp
@@ -35,9 +36,11 @@ import com.bvic.followmycrypto.ui.format.formatPrice
 @Composable
 fun CryptoDetailScreen(
     symbol: String,
+    currency: Currency,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CryptoDetailViewModel = viewModel { CryptoDetailViewModel(symbol, AppContainer.cryptoRepository) },
+    viewModel: CryptoDetailViewModel = viewModel { CryptoDetailViewModel(symbol, currency, AppContainer.cryptoRepository,
+        AppContainer.favoriRepository)},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -79,13 +82,13 @@ fun CryptoDetailContent(
                 onRetry = onRetry,
                 modifier = contentModifier,
             )
-            is CryptoDetailUiState.Success -> CryptoDetail(crypto = uiState.crypto, modifier = contentModifier)
+            is CryptoDetailUiState.Success -> CryptoDetail(crypto = uiState.crypto, currency = uiState.currency, modifier = contentModifier)
         }
     }
 }
 
 @Composable
-fun CryptoDetail(crypto: Crypto, modifier: Modifier = Modifier) {
+fun CryptoDetail(crypto: Crypto, currency: Currency, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -97,7 +100,7 @@ fun CryptoDetail(crypto: Crypto, modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
-            text = formatPrice(crypto.price),
+            text = formatPrice(crypto.price, currency.symbol),
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Bold,
         )
@@ -115,7 +118,7 @@ fun CryptoDetail(crypto: Crypto, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text = formatPrice(crypto.highPrice),
+                text = formatPrice(crypto.highPrice, currency.symbol),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
@@ -128,7 +131,7 @@ fun CryptoDetail(crypto: Crypto, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text = formatPrice(crypto.lowPrice),
+                text = formatPrice(crypto.lowPrice, currency.symbol),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
@@ -145,7 +148,7 @@ fun CryptoDetailContentPreview() {
         CryptoDetailContent(
             symbol = "BTC",
             uiState = CryptoDetailUiState.Success(
-                Crypto(symbol = "BTC", name = "Bitcoin", price = 85613.50, changePercent = 0.88, highPrice = 8545.0),
+                Crypto(symbol = "BTC", name = "Bitcoin", price = 85613.50, changePercent = 0.88, highPrice = 8545.0, lowPrice = 85475.0), Currency.EURO
             ),
             onBack = {},
             onRetry = {},
